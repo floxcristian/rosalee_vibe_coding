@@ -13,6 +13,7 @@ import { DataViewModule } from 'primeng/dataview';
 import { TagModule } from 'primeng/tag';
 import { BadgeModule } from 'primeng/badge';
 import { DividerModule } from 'primeng/divider';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
 
 import { AuthService } from '../../core/services/auth.service';
 import { MockDataService } from '../../core/services/mock-data.service';
@@ -34,7 +35,8 @@ import { Testimonial } from '../../core/models/testimonial.model';
     DataViewModule,
     TagModule,
     BadgeModule,
-    DividerModule
+    DividerModule,
+    OverlayPanelModule
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
