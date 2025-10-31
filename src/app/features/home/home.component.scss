@@ -1,0 +1,29 @@
+// Custom styles for home component
+:host {
+  display: block;
+}
+
+// Override PrimeNG menubar styles for cleaner look
+::ng-deep {
+  .p-menubar {
+    border: none !important;
+    border-radius: 0 !important;
+  }
+
+  // Custom card hover effects
+  .p-card {
+    transition: all 0.3s ease;
+    border-radius: 1rem;
+
+    &:hover {
+      transform: translateY(-4px);
+    }
+  }
+
+  // Table customization
+  .p-datatable-striped {
+    .p-datatable-tbody > tr:nth-child(even) {
+      background-color: #f9fafb;
+    }
+  }
+}
