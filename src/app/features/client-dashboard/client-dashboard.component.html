@@ -1,0 +1,239 @@
+<!-- Header -->
+<div class="dashboard-header">
+  <div class="header-content">
+    <div class="flex align-items-center gap-3">
+      <i class="pi pi-sparkles text-3xl text-pink-500 cursor-pointer" (click)="goToHome()"></i>
+      <h1 class="m-0 text-2xl font-bold">Mi Panel de Cliente</h1>
+    </div>
+
+    <div class="flex align-items-center gap-3">
+      <p-avatar
+        [image]="currentUser()?.avatar"
+        size="large"
+        shape="circle">
+      </p-avatar>
+      <div class="hidden md:block">
+        <div class="font-bold">{{ currentUser()?.name }}</div>
+        <div class="text-sm text-600">{{ currentUser()?.email }}</div>
+      </div>
+      <p-button
+        icon="pi pi-sign-out"
+        severity="danger"
+        [text]="true"
+        [rounded]="true"
+        (onClick)="logout()">
+      </p-button>
+    </div>
+  </div>
+</div>
+
+<!-- Main Content -->
+<div class="dashboard-container">
+  <!-- Welcome Section -->
+  <div class="welcome-section">
+    <p-card class="welcome-card">
+      <div class="flex justify-content-between align-items-center flex-wrap gap-3">
+        <div>
+          <h2 class="text-3xl font-bold m-0 mb-2">¡Bienvenida, {{ currentUser()?.name }}!</h2>
+          <p class="text-600 m-0">Gestiona tus citas y descubre nuevos servicios</p>
+        </div>
+        <p-button
+          label="Nueva Cita"
+          icon="pi pi-calendar-plus"
+          size="large"
+          (onClick)="goToHome()">
+        </p-button>
+      </div>
+    </p-card>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="grid">
+    <div class="col-12 md:col-6 lg:col-3">
+      <p-card class="stat-card">
+        <div class="flex align-items-center gap-3">
+          <div class="stat-icon bg-blue-100">
+            <i class="pi pi-calendar text-blue-500 text-3xl"></i>
+          </div>
+          <div>
+            <div class="stat-value">{{ upcomingAppointments().length }}</div>
+            <div class="stat-label">Citas Próximas</div>
+          </div>
+        </div>
+      </p-card>
+    </div>
+
+    <div class="col-12 md:col-6 lg:col-3">
+      <p-card class="stat-card">
+        <div class="flex align-items-center gap-3">
+          <div class="stat-icon bg-green-100">
+            <i class="pi pi-check-circle text-green-500 text-3xl"></i>
+          </div>
+          <div>
+            <div class="stat-value">{{ pastAppointments().length }}</div>
+            <div class="stat-label">Citas Completadas</div>
+          </div>
+        </div>
+      </p-card>
+    </div>
+
+    <div class="col-12 md:col-6 lg:col-3">
+      <p-card class="stat-card">
+        <div class="flex align-items-center gap-3">
+          <div class="stat-icon bg-purple-100">
+            <i class="pi pi-sparkles text-purple-500 text-3xl"></i>
+          </div>
+          <div>
+            <div class="stat-value">{{ myAppointments().length }}</div>
+            <div class="stat-label">Total de Servicios</div>
+          </div>
+        </div>
+      </p-card>
+    </div>
+
+    <div class="col-12 md:col-6 lg:col-3">
+      <p-card class="stat-card">
+        <div class="flex align-items-center gap-3">
+          <div class="stat-icon bg-pink-100">
+            <i class="pi pi-star text-pink-500 text-3xl"></i>
+          </div>
+          <div>
+            <div class="stat-value">VIP</div>
+            <div class="stat-label">Estado Cliente</div>
+          </div>
+        </div>
+      </p-card>
+    </div>
+  </div>
+
+  <!-- Upcoming Appointments -->
+  <div class="section-spacing">
+    <p-card>
+      <ng-template pTemplate="header">
+        <div class="card-header-custom">
+          <h3 class="text-2xl font-bold m-0 flex align-items-center gap-2">
+            <i class="pi pi-calendar-clock text-pink-500"></i>
+            Próximas Citas
+          </h3>
+        </div>
+      </ng-template>
+
+      @if (upcomingAppointments().length > 0) {
+        <p-timeline [value]="upcomingAppointments()" layout="vertical">
+          <ng-template pTemplate="content" let-appointment>
+            <div class="timeline-card">
+              <div class="flex justify-content-between align-items-start mb-3">
+                <div>
+                  <h4 class="text-xl font-bold m-0 mb-2">{{ appointment.serviceName }}</h4>
+                  <div class="flex flex-column gap-2">
+                    <p-chip>
+                      <i class="pi pi-calendar mr-2"></i>
+                      <span>{{ formatDate(appointment.date) }}</span>
+                    </p-chip>
+                    <p-chip>
+                      <i class="pi pi-clock mr-2"></i>
+                      <span>{{ appointment.time }}</span>
+                    </p-chip>
+                  </div>
+                </div>
+                <p-tag
+                  [value]="getStatusLabel(appointment.status)"
+                  [severity]="getStatusSeverity(appointment.status)">
+                </p-tag>
+              </div>
+
+              <div class="flex justify-content-between align-items-center pt-3 border-top-1 border-200">
+                <div class="text-2xl font-bold text-pink-600">{{ appointment.totalPrice }}€</div>
+                <div class="flex gap-2">
+                  <p-button
+                    label="Detalles"
+                    icon="pi pi-eye"
+                    [outlined]="true"
+                    size="small">
+                  </p-button>
+                  @if (appointment.status !== 'cancelled') {
+                    <p-button
+                      label="Cancelar"
+                      icon="pi pi-times"
+                      severity="danger"
+                      [outlined]="true"
+                      size="small"
+                      (onClick)="cancelAppointment(appointment.id)">
+                    </p-button>
+                  }
+                </div>
+              </div>
+            </div>
+          </ng-template>
+          <ng-template pTemplate="marker" let-appointment>
+            <div class="timeline-marker">
+              <i class="pi pi-calendar"></i>
+            </div>
+          </ng-template>
+        </p-timeline>
+      } @else {
+        <div class="empty-state">
+          <i class="pi pi-calendar-times text-6xl text-400 mb-3"></i>
+          <h3 class="text-xl font-bold text-600 mb-2">No tienes citas próximas</h3>
+          <p class="text-600 mb-4">¡Es un buen momento para reservar tu próximo servicio!</p>
+          <p-button
+            label="Reservar Cita"
+            icon="pi pi-calendar-plus"
+            (onClick)="goToHome()">
+          </p-button>
+        </div>
+      }
+    </p-card>
+  </div>
+
+  <!-- Past Appointments -->
+  <div class="section-spacing">
+    <p-card>
+      <ng-template pTemplate="header">
+        <div class="card-header-custom">
+          <h3 class="text-2xl font-bold m-0 flex align-items-center gap-2">
+            <i class="pi pi-history text-purple-500"></i>
+            Historial de Citas
+          </h3>
+        </div>
+      </ng-template>
+
+      @if (pastAppointments().length > 0) {
+        <p-table [value]="pastAppointments()" [paginator]="true" [rows]="5">
+          <ng-template pTemplate="header">
+            <tr>
+              <th>Servicio</th>
+              <th>Fecha</th>
+              <th>Hora</th>
+              <th>Precio</th>
+              <th>Estado</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-appointment>
+            <tr>
+              <td>
+                <div class="font-bold">{{ appointment.serviceName }}</div>
+              </td>
+              <td>{{ appointment.date | date: 'dd/MM/yyyy' }}</td>
+              <td>{{ appointment.time }}</td>
+              <td>
+                <span class="font-bold text-pink-600">{{ appointment.totalPrice }}€</span>
+              </td>
+              <td>
+                <p-tag
+                  [value]="getStatusLabel(appointment.status)"
+                  [severity]="getStatusSeverity(appointment.status)">
+                </p-tag>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      } @else {
+        <div class="empty-state">
+          <i class="pi pi-history text-6xl text-400 mb-3"></i>
+          <p class="text-600">No tienes citas en tu historial</p>
+        </div>
+      }
+    </p-card>
+  </div>
+</div>

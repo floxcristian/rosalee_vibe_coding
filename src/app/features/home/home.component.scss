@@ -1,29 +1,367 @@
-// Custom styles for home component
 :host {
   display: block;
 }
 
-// Override PrimeNG menubar styles for cleaner look
+// Variables for the theme
+$primary-pink: #ec4899;
+$primary-purple: #a855f7;
+$gradient-start: #ec4899;
+$gradient-end: #8b5cf6;
+
+// Logo styling
+.logo-text {
+  background: linear-gradient(135deg, $gradient-start 0%, $gradient-end 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+// Hero Section
+.hero-section {
+  min-height: 85vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  position: relative;
+  overflow: hidden;
+  padding: 3rem 1.5rem;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background:
+      radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+  }
+}
+
+.hero-content {
+  max-width: 900px;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-title {
+  font-size: 3.5rem;
+  font-weight: 800;
+  color: white;
+  margin-bottom: 1.5rem;
+  line-height: 1.2;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+
+  @media (max-width: 768px) {
+    font-size: 2.5rem;
+  }
+}
+
+.hero-subtitle {
+  display: block;
+  background: linear-gradient(to right, #fbbf24, #f59e0b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-description {
+  font-size: 1.25rem;
+  color: rgba(255, 255, 255, 0.95);
+  margin-bottom: 2.5rem;
+  line-height: 1.8;
+
+  @media (max-width: 768px) {
+    font-size: 1.1rem;
+  }
+}
+
+.hero-stats {
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+  margin-top: 4rem;
+  flex-wrap: wrap;
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: white;
+
+  i {
+    font-size: 2.5rem;
+  }
+}
+
+.stat-number {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.stat-label {
+  font-size: 0.875rem;
+  opacity: 0.9;
+}
+
+// Section Container
+.section-container {
+  padding: 5rem 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+
+  @media (max-width: 768px) {
+    padding: 3rem 1rem;
+  }
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.section-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: #1f2937;
+
+  @media (max-width: 768px) {
+    font-size: 2rem;
+  }
+}
+
+.section-description {
+  font-size: 1.125rem;
+  color: #6b7280;
+}
+
+// Service Cards
+.service-card {
+  transition: all 0.3s ease;
+  border-radius: 1rem;
+  overflow: hidden;
+
+  &:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  }
+}
+
+.service-card-header {
+  background: linear-gradient(135deg, $gradient-start 0%, $gradient-end 100%);
+  padding: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  min-height: 120px;
+}
+
+.service-card-small {
+  transition: all 0.2s ease;
+  border-radius: 0.75rem;
+  height: 100%;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+  }
+}
+
+// Feature Box (Why Choose Us)
+.feature-box {
+  text-align: center;
+  padding: 2rem;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+
+// Testimonial Cards
+.testimonial-card {
+  height: 100%;
+  transition: all 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+  }
+}
+
+// CTA Section
+.cta-section {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  padding: 5rem 2rem;
+  text-align: center;
+
+  @media (max-width: 768px) {
+    padding: 3rem 1.5rem;
+  }
+}
+
+.cta-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+// Contact Cards
+.contact-card {
+  transition: all 0.3s ease;
+  border-radius: 1rem;
+  height: 100%;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
+  }
+}
+
+// Footer
+.footer {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 4rem 2rem 2rem;
+  color: white;
+}
+
+.footer-content {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.footer-link {
+  color: rgba(255, 255, 255, 0.9);
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    color: white;
+    transform: translateX(4px);
+  }
+}
+
+// PrimeNG Overrides
 ::ng-deep {
+  // Menubar
   .p-menubar {
     border: none !important;
     border-radius: 0 !important;
+    padding: 1rem 2rem;
   }
 
-  // Custom card hover effects
+  // Cards
   .p-card {
-    transition: all 0.3s ease;
-    border-radius: 1rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+    border: none;
+
+    .p-card-body {
+      padding: 1.5rem;
+    }
+
+    .p-card-content {
+      padding: 0;
+    }
+  }
+
+  // Buttons
+  .p-button {
+    font-weight: 600;
+    transition: all 0.2s ease;
 
     &:hover {
-      transform: translateY(-4px);
+      transform: scale(1.02);
     }
   }
 
-  // Table customization
-  .p-datatable-striped {
-    .p-datatable-tbody > tr:nth-child(even) {
-      background-color: #f9fafb;
+  // Tags
+  .p-tag {
+    font-weight: 600;
+    padding: 0.35rem 0.75rem;
+  }
+
+  // Rating
+  .p-rating {
+    .p-rating-icon {
+      color: #fbbf24;
     }
+  }
+
+  // Carousel
+  .p-carousel {
+    .p-carousel-indicators {
+      padding: 1.5rem 0;
+    }
+
+    .p-carousel-prev,
+    .p-carousel-next {
+      width: 3rem;
+      height: 3rem;
+      border-radius: 50%;
+      background: white;
+      color: $primary-purple;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+      &:hover {
+        background: $primary-purple;
+        color: white;
+      }
+    }
+  }
+
+  // DataView
+  .p-dataview {
+    .p-dataview-content {
+      background: transparent;
+    }
+  }
+
+  // Divider
+  .p-divider {
+    &.p-divider-horizontal {
+      &::before {
+        border-top-color: rgba(255, 255, 255, 0.2);
+      }
+    }
+  }
+
+  // Avatar
+  .p-avatar {
+    border: 3px solid white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+}
+
+// Animations
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Responsive utilities
+@media (max-width: 768px) {
+  .hero-stats {
+    gap: 2rem;
+  }
+
+  .stat-item {
+    i {
+      font-size: 2rem;
+    }
+  }
+
+  .stat-number {
+    font-size: 1.5rem;
   }
 }

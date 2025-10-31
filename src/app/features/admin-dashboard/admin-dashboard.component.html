@@ -1,0 +1,303 @@
+<!-- Header -->
+<div class="dashboard-header">
+  <div class="header-content">
+    <div class="flex align-items-center gap-3">
+      <i class="pi pi-sparkles text-3xl text-pink-500 cursor-pointer" (click)="goToHome()"></i>
+      <h1 class="m-0 text-2xl font-bold">Panel de Administración</h1>
+    </div>
+
+    <div class="flex align-items-center gap-3">
+      <p-avatar
+        [image]="currentUser()?.avatar"
+        size="large"
+        shape="circle">
+      </p-avatar>
+      <div class="hidden md:block">
+        <div class="font-bold">{{ currentUser()?.name }}</div>
+        <div class="text-sm text-600">Administrador</div>
+      </div>
+      <p-button
+        icon="pi pi-sign-out"
+        severity="danger"
+        [text]="true"
+        [rounded]="true"
+        (onClick)="logout()">
+      </p-button>
+    </div>
+  </div>
+</div>
+
+<!-- Main Content -->
+<div class="dashboard-container">
+  <!-- Stats Cards -->
+  <div class="grid">
+    <div class="col-12 md:col-6 lg:col-3">
+      <p-card class="stat-card stat-card-pink">
+        <div class="flex flex-column gap-2">
+          <div class="flex justify-content-between align-items-start">
+            <div>
+              <div class="stat-label">Citas Hoy</div>
+              <div class="stat-value">{{ todayAppointments().length }}</div>
+            </div>
+            <div class="stat-icon">
+              <i class="pi pi-calendar"></i>
+            </div>
+          </div>
+          <div class="text-sm text-600">
+            <i class="pi pi-arrow-up text-green-500"></i>
+            <span>12% más que ayer</span>
+          </div>
+        </div>
+      </p-card>
+    </div>
+
+    <div class="col-12 md:col-6 lg:col-3">
+      <p-card class="stat-card stat-card-purple">
+        <div class="flex flex-column gap-2">
+          <div class="flex justify-content-between align-items-start">
+            <div>
+              <div class="stat-label">Pendientes</div>
+              <div class="stat-value">{{ pendingAppointments().length }}</div>
+            </div>
+            <div class="stat-icon">
+              <i class="pi pi-clock"></i>
+            </div>
+          </div>
+          <div class="text-sm text-600">
+            Requieren confirmación
+          </div>
+        </div>
+      </p-card>
+    </div>
+
+    <div class="col-12 md:col-6 lg:col-3">
+      <p-card class="stat-card stat-card-blue">
+        <div class="flex flex-column gap-2">
+          <div class="flex justify-content-between align-items-start">
+            <div>
+              <div class="stat-label">Ingresos Total</div>
+              <div class="stat-value">{{ totalRevenue() }}€</div>
+            </div>
+            <div class="stat-icon">
+              <i class="pi pi-euro"></i>
+            </div>
+          </div>
+          <div class="text-sm text-600">
+            <i class="pi pi-arrow-up text-green-500"></i>
+            <span>8% más este mes</span>
+          </div>
+        </div>
+      </p-card>
+    </div>
+
+    <div class="col-12 md:col-6 lg:col-3">
+      <p-card class="stat-card stat-card-green">
+        <div class="flex flex-column gap-2">
+          <div class="flex justify-content-between align-items-start">
+            <div>
+              <div class="stat-label">Total Citas</div>
+              <div class="stat-value">{{ appointments().length }}</div>
+            </div>
+            <div class="stat-icon">
+              <i class="pi pi-chart-line"></i>
+            </div>
+          </div>
+          <div class="text-sm text-600">
+            En toda la plataforma
+          </div>
+        </div>
+      </p-card>
+    </div>
+  </div>
+
+  <!-- Charts -->
+  <div class="grid">
+    <div class="col-12 lg:col-8">
+      <p-card>
+        <ng-template pTemplate="header">
+          <div class="card-header-custom">
+            <h3 class="text-xl font-bold m-0">Estadísticas Semanales</h3>
+          </div>
+        </ng-template>
+        <p-chart type="line" [data]="chartData()" [options]="chartOptions()" height="300px"></p-chart>
+      </p-card>
+    </div>
+
+    <div class="col-12 lg:col-4">
+      <p-card>
+        <ng-template pTemplate="header">
+          <div class="card-header-custom">
+            <h3 class="text-xl font-bold m-0">Servicios Populares</h3>
+          </div>
+        </ng-template>
+
+        <div class="flex flex-column gap-4">
+          @for (service of services().slice(0, 4); track service.id) {
+            <div>
+              <div class="flex justify-content-between mb-2">
+                <span class="font-semibold">{{ service.name }}</span>
+                <span class="text-600">85%</span>
+              </div>
+              <p-progressBar [value]="85" [showValue]="false"></p-progressBar>
+            </div>
+          }
+        </div>
+      </p-card>
+    </div>
+  </div>
+
+  <!-- Pending Appointments -->
+  @if (pendingAppointments().length > 0) {
+    <div class="section-spacing">
+      <p-card>
+        <ng-template pTemplate="header">
+          <div class="card-header-custom">
+            <h3 class="text-xl font-bold m-0 flex align-items-center gap-2">
+              <i class="pi pi-exclamation-circle text-orange-500"></i>
+              Citas Pendientes de Confirmación
+            </h3>
+          </div>
+        </ng-template>
+
+        <div class="grid">
+          @for (appointment of pendingAppointments(); track appointment.id) {
+            <div class="col-12 md:col-6 lg:col-4">
+              <div class="pending-card">
+                <div class="flex justify-content-between align-items-start mb-3">
+                  <div>
+                    <h4 class="font-bold m-0 mb-1">{{ appointment.clientName }}</h4>
+                    <p class="text-600 text-sm m-0">{{ appointment.serviceName }}</p>
+                  </div>
+                  <p-tag value="Pendiente" severity="warn"></p-tag>
+                </div>
+
+                <div class="flex flex-column gap-2 mb-3">
+                  <div class="flex align-items-center gap-2 text-sm">
+                    <i class="pi pi-calendar text-600"></i>
+                    <span>{{ appointment.date | date: 'dd/MM/yyyy' }}</span>
+                  </div>
+                  <div class="flex align-items-center gap-2 text-sm">
+                    <i class="pi pi-clock text-600"></i>
+                    <span>{{ appointment.time }}</span>
+                  </div>
+                  <div class="flex align-items-center gap-2 text-sm">
+                    <i class="pi pi-euro text-600"></i>
+                    <span class="font-bold">{{ appointment.totalPrice }}€</span>
+                  </div>
+                </div>
+
+                <div class="flex gap-2">
+                  <p-button
+                    label="Confirmar"
+                    icon="pi pi-check"
+                    severity="success"
+                    size="small"
+                    [style]="{'flex': '1'}"
+                    (onClick)="confirmAppointment(appointment.id)">
+                  </p-button>
+                  <p-button
+                    icon="pi pi-times"
+                    severity="danger"
+                    size="small"
+                    [outlined]="true"
+                    (onClick)="cancelAppointment(appointment.id)">
+                  </p-button>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      </p-card>
+    </div>
+  }
+
+  <!-- All Appointments Table -->
+  <div class="section-spacing">
+    <p-card>
+      <ng-template pTemplate="header">
+        <div class="card-header-custom">
+          <div class="flex justify-content-between align-items-center">
+            <h3 class="text-xl font-bold m-0 flex align-items-center gap-2">
+              <i class="pi pi-list text-purple-500"></i>
+              Todas las Citas
+            </h3>
+            <p-button
+              label="Nueva Cita"
+              icon="pi pi-plus"
+              size="small">
+            </p-button>
+          </div>
+        </div>
+      </ng-template>
+
+      <p-table
+        [value]="recentAppointments()"
+        [paginator]="true"
+        [rows]="10"
+        [rowsPerPageOptions]="[10, 25, 50]"
+        [tableStyle]="{ 'min-width': '50rem' }">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Cliente</th>
+            <th>Servicio</th>
+            <th>Fecha</th>
+            <th>Hora</th>
+            <th>Precio</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-appointment>
+          <tr>
+            <td>{{ appointment.clientName }}</td>
+            <td>{{ appointment.serviceName }}</td>
+            <td>{{ appointment.date | date: 'dd/MM/yyyy' }}</td>
+            <td>{{ appointment.time }}</td>
+            <td>
+              <span class="font-bold text-pink-600">{{ appointment.totalPrice }}€</span>
+            </td>
+            <td>
+              <p-tag
+                [value]="getStatusLabel(appointment.status)"
+                [severity]="getStatusSeverity(appointment.status)">
+              </p-tag>
+            </td>
+            <td>
+              <div class="flex gap-1">
+                @if (appointment.status === 'pending') {
+                  <p-button
+                    icon="pi pi-check"
+                    severity="success"
+                    [text]="true"
+                    [rounded]="true"
+                    size="small"
+                    pTooltip="Confirmar"
+                    (onClick)="confirmAppointment(appointment.id)">
+                  </p-button>
+                }
+                @if (appointment.status === 'confirmed') {
+                  <p-button
+                    icon="pi pi-check-circle"
+                    severity="info"
+                    [text]="true"
+                    [rounded]="true"
+                    size="small"
+                    pTooltip="Completar"
+                    (onClick)="completeAppointment(appointment.id)">
+                  </p-button>
+                }
+                <p-button
+                  icon="pi pi-eye"
+                  [text]="true"
+                  [rounded]="true"
+                  size="small"
+                  pTooltip="Ver detalles">
+                </p-button>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </p-card>
+  </div>
+</div>

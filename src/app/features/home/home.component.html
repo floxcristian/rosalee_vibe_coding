@@ -1,185 +1,394 @@
-<div class="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
-  <!-- Navigation -->
-  <div class="bg-white shadow-sm">
-    <p-menubar [model]="menuItems()" class="border-none">
-      <ng-template pTemplate="start">
-        <div class="flex items-center gap-2">
-          <i class="pi pi-sparkles text-2xl text-indigo-600"></i>
-          <span class="text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-            Rosalee App
-          </span>
-        </div>
-      </ng-template>
-      <ng-template pTemplate="end">
-        <div class="flex items-center gap-2">
-          <p-button icon="pi pi-bell" [text]="true" [rounded]="true" severity="secondary"></p-button>
-          <p-avatar icon="pi pi-user" styleClass="bg-indigo-600" shape="circle"></p-avatar>
-        </div>
-      </ng-template>
-    </p-menubar>
-  </div>
+<!-- Navigation -->
+<p-menubar [model]="menuItems()" styleClass="border-0 shadow-3">
+  <ng-template pTemplate="start">
+    <div class="flex align-items-center gap-2">
+      <i class="pi pi-sparkles text-3xl text-pink-500"></i>
+      <span class="text-2xl font-bold logo-text">Rosalee</span>
+    </div>
+  </ng-template>
 
-  <!-- Hero Section -->
-  <div class="container mx-auto px-4 py-12">
-    <div class="text-center mb-12">
-      <h1 class="text-5xl font-bold mb-4 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
-        Welcome to Rosalee App
-      </h1>
-      <p class="text-xl text-gray-600 mb-8">
-        Built with Angular 20, PrimeNG & Tailwind CSS
-      </p>
-      <div class="flex justify-center gap-4">
-        <p-button label="Get Started" icon="pi pi-arrow-right" iconPos="right" styleClass="bg-gradient-to-r from-indigo-600 to-purple-600"></p-button>
-        <p-button label="Learn More" icon="pi pi-info-circle" [outlined]="true" severity="secondary"></p-button>
+  <ng-template pTemplate="end">
+    @if (isAuthenticated()) {
+      <div class="flex align-items-center gap-3">
+        <span class="text-sm">{{ currentUser()?.name }}</span>
+        <p-button
+          label="Mi Panel"
+          icon="pi pi-user"
+          [text]="true"
+          (onClick)="goToDashboard()">
+        </p-button>
+        <p-button
+          label="Salir"
+          icon="pi pi-sign-out"
+          severity="danger"
+          [text]="true"
+          (onClick)="logout()">
+        </p-button>
+      </div>
+    } @else {
+      <div class="flex gap-2">
+        <p-button
+          label="Cliente"
+          icon="pi pi-user"
+          [outlined]="true"
+          severity="secondary"
+          (onClick)="loginAsClient()">
+        </p-button>
+        <p-button
+          label="Admin"
+          icon="pi pi-shield"
+          (onClick)="loginAsAdmin()">
+        </p-button>
+      </div>
+    }
+  </ng-template>
+</p-menubar>
+
+<!-- Hero Section -->
+<section id="hero" class="hero-section">
+  <div class="hero-content">
+    <h1 class="hero-title">
+      Belleza y Elegancia
+      <span class="hero-subtitle">en Cada Detalle</span>
+    </h1>
+    <p class="hero-description">
+      Experimenta el arte del cuidado de uñas en nuestro exclusivo salón de belleza.
+      Profesionalismo, calidad y un toque de lujo en cada servicio.
+    </p>
+    <div class="flex gap-3 justify-content-center flex-wrap">
+      <p-button
+        label="Reservar Cita"
+        icon="pi pi-calendar"
+        size="large"
+        (onClick)="loginAsClient()">
+      </p-button>
+      <p-button
+        label="Ver Servicios"
+        icon="pi pi-sparkles"
+        size="large"
+        [outlined]="true"
+        (onClick)="scrollToSection('services')">
+      </p-button>
+    </div>
+
+    <!-- Stats -->
+    <div class="hero-stats">
+      <div class="stat-item">
+        <i class="pi pi-star-fill text-yellow-500"></i>
+        <div>
+          <div class="stat-number">4.9</div>
+          <div class="stat-label">Calificación</div>
+        </div>
+      </div>
+      <div class="stat-item">
+        <i class="pi pi-users text-pink-500"></i>
+        <div>
+          <div class="stat-number">500+</div>
+          <div class="stat-label">Clientes Felices</div>
+        </div>
+      </div>
+      <div class="stat-item">
+        <i class="pi pi-heart-fill text-red-500"></i>
+        <div>
+          <div class="stat-number">5+</div>
+          <div class="stat-label">Años de Experiencia</div>
+        </div>
       </div>
     </div>
+  </div>
+</section>
 
-    <!-- Feature Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-      <p-card class="shadow-lg hover:shadow-xl transition-shadow duration-300">
-        <ng-template pTemplate="header">
-          <div class="bg-gradient-to-r from-blue-500 to-cyan-500 p-6 rounded-t-lg">
-            <i class="pi pi-bolt text-white text-5xl"></i>
-          </div>
-        </ng-template>
-        <div class="p-4">
-          <h3 class="text-2xl font-bold mb-3 text-gray-800">Lightning Fast</h3>
-          <p class="text-gray-600">
-            Built with Angular's latest features including signals and standalone components for optimal performance.
-          </p>
-        </div>
-      </p-card>
+<!-- Popular Services Section -->
+<section class="section-container" style="background: linear-gradient(to bottom, #faf5ff, #ffffff);">
+  <div class="section-header">
+    <h2 class="section-title">Servicios Destacados</h2>
+    <p class="section-description">Los favoritos de nuestras clientas</p>
+  </div>
 
-      <p-card class="shadow-lg hover:shadow-xl transition-shadow duration-300">
-        <ng-template pTemplate="header">
-          <div class="bg-gradient-to-r from-purple-500 to-pink-500 p-6 rounded-t-lg">
-            <i class="pi pi-palette text-white text-5xl"></i>
-          </div>
-        </ng-template>
-        <div class="p-4">
-          <h3 class="text-2xl font-bold mb-3 text-gray-800">Beautiful Design</h3>
-          <p class="text-gray-600">
-            Seamlessly integrated PrimeNG components with Tailwind CSS for stunning UI experiences.
-          </p>
-        </div>
-      </p-card>
-
-      <p-card class="shadow-lg hover:shadow-xl transition-shadow duration-300">
-        <ng-template pTemplate="header">
-          <div class="bg-gradient-to-r from-green-500 to-emerald-500 p-6 rounded-t-lg">
-            <i class="pi pi-code text-white text-5xl"></i>
-          </div>
-        </ng-template>
-        <div class="p-4">
-          <h3 class="text-2xl font-bold mb-3 text-gray-800">Best Practices</h3>
-          <p class="text-gray-600">
-            Following enterprise-grade patterns used by top tech companies like Netflix, Uber, and Spotify.
-          </p>
-        </div>
-      </p-card>
-    </div>
-
-    <!-- Data Table Section -->
-    <p-card class="shadow-xl">
-      <ng-template pTemplate="header">
-        <div class="p-6 bg-gradient-to-r from-indigo-600 to-purple-600">
-          <h2 class="text-3xl font-bold text-white flex items-center gap-3">
-            <i class="pi pi-shopping-cart"></i>
-            Product Inventory
-          </h2>
-        </div>
-      </ng-template>
-
-      <div class="p-6">
-        <div class="mb-4">
-          <span class="p-input-icon-left w-full">
-            <i class="pi pi-search"></i>
-            <input
-              type="text"
-              pInputText
-              placeholder="Search products..."
-              class="w-full"
-            />
-          </span>
-        </div>
-
-        <p-table
-          [value]="products()"
-          [tableStyle]="{ 'min-width': '50rem' }"
-          [paginator]="true"
-          [rows]="5"
-          [rowsPerPageOptions]="[5, 10, 20]"
-          styleClass="p-datatable-striped"
-        >
+  <div class="grid">
+    @for (service of popularServices(); track service.id) {
+      <div class="col-12 md:col-6 lg:col-4">
+        <p-card class="service-card h-full">
           <ng-template pTemplate="header">
-            <tr>
-              <th class="text-left">ID</th>
-              <th class="text-left">Product Name</th>
-              <th class="text-left">Category</th>
-              <th class="text-left">Price</th>
-              <th class="text-left">Status</th>
-              <th class="text-left">Actions</th>
-            </tr>
+            <div class="service-card-header">
+              <i class="pi pi-sparkles text-4xl"></i>
+            </div>
           </ng-template>
-          <ng-template pTemplate="body" let-product>
-            <tr>
-              <td>{{ product.id }}</td>
-              <td class="font-semibold">{{ product.name }}</td>
-              <td>
-                <span class="px-3 py-1 rounded-full bg-gray-100 text-gray-700 text-sm">
-                  {{ product.category }}
-                </span>
-              </td>
-              <td class="font-bold text-green-600">${{ product.price }}</td>
-              <td>
-                <p-tag
-                  [value]="product.status"
-                  [severity]="getSeverity(product.status)"
-                ></p-tag>
-              </td>
-              <td>
-                <div class="flex gap-2">
-                  <p-button
-                    icon="pi pi-pencil"
-                    [text]="true"
-                    [rounded]="true"
-                    severity="info"
-                    size="small"
-                  ></p-button>
-                  <p-button
-                    icon="pi pi-trash"
-                    [text]="true"
-                    [rounded]="true"
-                    severity="danger"
-                    size="small"
-                  ></p-button>
-                </div>
-              </td>
-            </tr>
-          </ng-template>
-        </p-table>
-      </div>
 
-      <ng-template pTemplate="footer">
-        <div class="flex justify-between items-center p-4 bg-gray-50">
-          <span class="text-gray-600">Total Products: {{ products().length }}</span>
-          <p-button label="Add New Product" icon="pi pi-plus" size="small"></p-button>
-        </div>
-      </ng-template>
-    </p-card>
+          <div class="flex flex-column gap-3">
+            <div class="flex justify-content-between align-items-start">
+              <h3 class="text-xl font-bold m-0">{{ service.name }}</h3>
+              <p-tag
+                [value]="getServiceCategoryLabel(service.category)"
+                [severity]="getServiceCategorySeverity(service.category)">
+              </p-tag>
+            </div>
+
+            <p class="text-600 m-0">{{ service.description }}</p>
+
+            <div class="flex justify-content-between align-items-center">
+              <div>
+                <div class="text-2xl font-bold text-pink-600">{{ service.price }}€</div>
+                <div class="text-sm text-500">
+                  <i class="pi pi-clock"></i> {{ service.duration }} min
+                </div>
+              </div>
+              <p-button
+                label="Reservar"
+                icon="pi pi-calendar-plus"
+                [rounded]="true"
+                (onClick)="loginAsClient()">
+              </p-button>
+            </div>
+          </div>
+        </p-card>
+      </div>
+    }
+  </div>
+</section>
+
+<!-- All Services Section -->
+<section id="services" class="section-container">
+  <div class="section-header">
+    <h2 class="section-title">Todos Nuestros Servicios</h2>
+    <p class="section-description">Elige el tratamiento perfecto para ti</p>
   </div>
 
-  <!-- Footer -->
-  <div class="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white py-8 mt-12">
-    <div class="container mx-auto px-4 text-center">
-      <div class="flex justify-center gap-4 mb-4">
-        <i class="pi pi-github text-2xl cursor-pointer hover:scale-110 transition-transform"></i>
-        <i class="pi pi-twitter text-2xl cursor-pointer hover:scale-110 transition-transform"></i>
-        <i class="pi pi-linkedin text-2xl cursor-pointer hover:scale-110 transition-transform"></i>
+  <p-dataView [value]="services()" layout="grid">
+    <ng-template let-service pTemplate="gridItem">
+      <div class="col-12 md:col-6 lg:col-3 p-2">
+        <p-card class="service-card-small h-full">
+          <div class="flex flex-column gap-2 h-full">
+            <div class="flex align-items-center gap-2">
+              <i class="pi pi-sparkles text-pink-500"></i>
+              <h4 class="m-0 font-semibold">{{ service.name }}</h4>
+            </div>
+
+            <p class="text-sm text-600 m-0 flex-grow-1">{{ service.description }}</p>
+
+            <div class="flex justify-content-between align-items-center pt-2 border-top-1 border-200">
+              <div>
+                <div class="font-bold text-pink-600">{{ service.price }}€</div>
+                <div class="text-xs text-500">{{ service.duration }} min</div>
+              </div>
+              <p-button
+                icon="pi pi-plus"
+                [rounded]="true"
+                [text]="true"
+                size="small"
+                (onClick)="loginAsClient()">
+              </p-button>
+            </div>
+          </div>
+        </p-card>
       </div>
-      <p class="text-sm opacity-90">
-        © 2025 Rosalee App. Built with ❤️ using Angular, PrimeNG & Tailwind CSS
-      </p>
+    </ng-template>
+  </p-dataView>
+</section>
+
+<!-- Why Choose Us Section -->
+<section class="section-container" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+  <div class="section-header">
+    <h2 class="section-title text-white">¿Por Qué Elegirnos?</h2>
+    <p class="section-description text-white-alpha-90">La excelencia es nuestro estándar</p>
+  </div>
+
+  <div class="grid">
+    <div class="col-12 md:col-6 lg:col-3">
+      <div class="feature-box">
+        <i class="pi pi-verified text-5xl text-white mb-3"></i>
+        <h3 class="text-xl font-bold text-white mb-2">Profesionales Certificados</h3>
+        <p class="text-white-alpha-90">Nuestro equipo cuenta con certificaciones internacionales</p>
+      </div>
+    </div>
+
+    <div class="col-12 md:col-6 lg:col-3">
+      <div class="feature-box">
+        <i class="pi pi-shield text-5xl text-white mb-3"></i>
+        <h3 class="text-xl font-bold text-white mb-2">Productos Premium</h3>
+        <p class="text-white-alpha-90">Utilizamos solo marcas de alta gama y calidad</p>
+      </div>
+    </div>
+
+    <div class="col-12 md:col-6 lg:col-3">
+      <div class="feature-box">
+        <i class="pi pi-heart text-5xl text-white mb-3"></i>
+        <h3 class="text-xl font-bold text-white mb-2">Atención Personalizada</h3>
+        <p class="text-white-alpha-90">Cada cliente es único y especial para nosotros</p>
+      </div>
+    </div>
+
+    <div class="col-12 md:col-6 lg:col-3">
+      <div class="feature-box">
+        <i class="pi pi-sparkles text-5xl text-white mb-3"></i>
+        <h3 class="text-xl font-bold text-white mb-2">Ambiente Relajante</h3>
+        <p class="text-white-alpha-90">Un espacio diseñado para tu bienestar y confort</p>
+      </div>
     </div>
   </div>
-</div>
+</section>
+
+<!-- Testimonials Section -->
+<section id="testimonials" class="section-container">
+  <div class="section-header">
+    <h2 class="section-title">Lo Que Dicen Nuestras Clientas</h2>
+    <p class="section-description">Experiencias reales, resultados extraordinarios</p>
+  </div>
+
+  <p-carousel
+    [value]="testimonials()"
+    [numVisible]="3"
+    [numScroll]="1"
+    [circular]="true"
+    [autoplayInterval]="5000"
+    [responsiveOptions]="carouselResponsiveOptions">
+    <ng-template let-testimonial pTemplate="item">
+      <div class="p-3">
+        <p-card class="testimonial-card">
+          <div class="flex flex-column gap-3">
+            <div class="flex align-items-center gap-3">
+              <p-avatar
+                [image]="testimonial.clientAvatar"
+                size="large"
+                shape="circle">
+              </p-avatar>
+              <div class="flex-grow-1">
+                <div class="font-bold">{{ testimonial.clientName }}</div>
+                <div class="text-sm text-600">{{ testimonial.service }}</div>
+              </div>
+            </div>
+
+            <p-rating
+              [(ngModel)]="testimonial.rating"
+              [readonly]="true">
+            </p-rating>
+
+            <p class="text-600 m-0 line-height-3">"{{ testimonial.comment }}"</p>
+
+            <div class="text-xs text-500">
+              {{ testimonial.date | date: 'dd/MM/yyyy' }}
+            </div>
+          </div>
+        </p-card>
+      </div>
+    </ng-template>
+  </p-carousel>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section">
+  <div class="cta-content">
+    <h2 class="text-4xl font-bold text-white mb-3">¿Lista para Lucir Uñas Perfectas?</h2>
+    <p class="text-xl text-white-alpha-90 mb-4">Reserva tu cita hoy y descubre la diferencia Rosalee</p>
+    <p-button
+      label="Reservar Ahora"
+      icon="pi pi-calendar-plus"
+      size="large"
+      severity="contrast"
+      (onClick)="loginAsClient()">
+    </p-button>
+  </div>
+</section>
+
+<!-- Contact Section -->
+<section id="contact" class="section-container">
+  <div class="section-header">
+    <h2 class="section-title">Encuéntranos</h2>
+    <p class="section-description">Estamos aquí para ti</p>
+  </div>
+
+  <div class="grid">
+    <div class="col-12 md:col-4">
+      <p-card class="contact-card h-full">
+        <div class="flex flex-column align-items-center gap-3 text-center">
+          <i class="pi pi-map-marker text-4xl text-pink-500"></i>
+          <h3 class="text-xl font-bold m-0">Ubicación</h3>
+          <p class="text-600 m-0">Calle Principal 123<br>28001 Madrid, España</p>
+        </div>
+      </p-card>
+    </div>
+
+    <div class="col-12 md:col-4">
+      <p-card class="contact-card h-full">
+        <div class="flex flex-column align-items-center gap-3 text-center">
+          <i class="pi pi-phone text-4xl text-pink-500"></i>
+          <h3 class="text-xl font-bold m-0">Teléfono</h3>
+          <p class="text-600 m-0">+34 912 345 678<br>Lun - Sáb: 10:00 - 20:00</p>
+        </div>
+      </p-card>
+    </div>
+
+    <div class="col-12 md:col-4">
+      <p-card class="contact-card h-full">
+        <div class="flex flex-column align-items-center gap-3 text-center">
+          <i class="pi pi-envelope text-4xl text-pink-500"></i>
+          <h3 class="text-xl font-bold m-0">Email</h3>
+          <p class="text-600 m-0">info@rosalee.com<br>contacto@rosalee.com</p>
+        </div>
+      </p-card>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-content">
+    <div class="grid">
+      <div class="col-12 md:col-4">
+        <div class="flex align-items-center gap-2 mb-3">
+          <i class="pi pi-sparkles text-3xl text-pink-400"></i>
+          <span class="text-2xl font-bold text-white">Rosalee</span>
+        </div>
+        <p class="text-white-alpha-80">
+          Tu salón de belleza de confianza. Dedicados a realzar tu belleza natural con los mejores tratamientos.
+        </p>
+      </div>
+
+      <div class="col-12 md:col-4">
+        <h4 class="text-white font-bold mb-3">Enlaces Rápidos</h4>
+        <div class="flex flex-column gap-2">
+          <a class="footer-link" (click)="scrollToSection('services')">Servicios</a>
+          <a class="footer-link" (click)="scrollToSection('testimonials')">Testimonios</a>
+          <a class="footer-link" (click)="scrollToSection('contact')">Contacto</a>
+          <a class="footer-link" (click)="loginAsClient()">Reservar Cita</a>
+        </div>
+      </div>
+
+      <div class="col-12 md:col-4">
+        <h4 class="text-white font-bold mb-3">Síguenos</h4>
+        <div class="flex gap-3">
+          <p-button
+            icon="pi pi-instagram"
+            [rounded]="true"
+            [text]="true"
+            severity="contrast">
+          </p-button>
+          <p-button
+            icon="pi pi-facebook"
+            [rounded]="true"
+            [text]="true"
+            severity="contrast">
+          </p-button>
+          <p-button
+            icon="pi pi-twitter"
+            [rounded]="true"
+            [text]="true"
+            severity="contrast">
+          </p-button>
+          <p-button
+            icon="pi pi-whatsapp"
+            [rounded]="true"
+            [text]="true"
+            severity="contrast">
+          </p-button>
+        </div>
+      </div>
+    </div>
+
+    <p-divider></p-divider>
+
+    <div class="text-center text-white-alpha-80">
+      <p class="m-0">&copy; 2024 Rosalee Beauty Salon. Todos los derechos reservados.</p>
+    </div>
+  </div>
+</footer>
